@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 
 const api = axios.create({
-  baseURL: "localhost:4000",
+  baseURL: "http://localhost:4000",
   headers: {
     "Content-Type": "application/json",
   },
