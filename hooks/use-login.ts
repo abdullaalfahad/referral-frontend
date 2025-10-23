@@ -1,10 +1,10 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { LoginInput } from "@/schemas/login-schema";
-import api from "@/lib/axios";
-import { useAuth } from "@/hooks/use-auth";
 import toast from "react-hot-toast";
+import { useAuth } from "@/hooks/use-auth";
+import api from "@/lib/axios";
+import type { LoginInput } from "@/schemas/login-schema";
 
 export function useLogin() {
   const { setToken, redirectToDashboard } = useAuth();

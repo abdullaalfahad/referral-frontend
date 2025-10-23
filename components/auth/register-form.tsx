@@ -1,24 +1,51 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import {
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  Mail,
+  User,
+} from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLogin } from "@/hooks/use-login";
-import { type LoginInput, loginSchema } from "@/schemas/login-schema";
+import { useAuth } from "@/hooks/use-auth";
+import { useReferral } from "@/hooks/use-referral";
+import { useRegister } from "@/hooks/use-register";
+import { type RegisterInput, registerSchema } from "@/schemas/register-schema";
 
-export function LoginForm() {
+export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const searchParams = useSearchParams();
+  const referralCode = searchParams.get("ref");
+
+  const { setToken, redirectToDashboard } = useAuth();
+
+  const referralMutation = useReferral();
+
+  const registerMutation = useRegister();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) });
+  } = useForm<RegisterInput>({ resolver: zodResolver(registerSchema) });
 
-  const mutation = useLogin();
-  const onSubmit = (data: LoginInput) => mutation.mutate(data);
+  const onSubmit = (data: RegisterInput) =>
+    registerMutation.mutate(data, {
+      onSuccess: async (res) => {
+        setToken(res.token);
+        if (referralCode) {
+          await referralMutation.mutateAsync(referralCode);
+        }
+        redirectToDashboard();
+      },
+    });
 
   return (
     <form
@@ -27,12 +54,42 @@ export function LoginForm() {
     >
       <div className="text-center mb-8">
         <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Lock className="w-8 h-8 text-white" />
+          <User className="w-8 h-8 text-white" />
         </div>
         <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-          Welcome Back
+          Create Account
         </h2>
-        <p className="text-gray-600">Sign in to continue</p>
+        <p className="text-gray-600">Join and start earning rewards!</p>
+      </div>
+
+      <div className="mb-5">
+        <label
+          htmlFor="name"
+          className="block text-gray-700 text-sm font-semibold mb-2"
+        >
+          Full Name
+        </label>
+        <div className="relative">
+          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            id="name"
+            {...register("name")}
+            type="text"
+            placeholder="John Doe"
+            disabled={registerMutation.isPending}
+            className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:outline-none ${
+              errors.name
+                ? "border-red-400 focus:border-red-500"
+                : "border-gray-200 focus:border-blue-500"
+            }`}
+          />
+        </div>
+        {errors.name && (
+          <div className="flex items-center gap-1 mt-2 text-red-600 text-sm">
+            <AlertCircle className="w-4 h-4" />
+            <span>{errors.name.message}</span>
+          </div>
+        )}
       </div>
 
       <div className="mb-5">
@@ -49,7 +106,7 @@ export function LoginForm() {
             {...register("email")}
             type="email"
             placeholder="you@example.com"
-            disabled={mutation.isPending}
+            disabled={registerMutation.isPending}
             className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:outline-none ${
               errors.email
                 ? "border-red-400 focus:border-red-500"
@@ -79,7 +136,7 @@ export function LoginForm() {
             {...register("password")}
             type={showPassword ? "text" : "password"}
             placeholder="••••••••"
-            disabled={mutation.isPending}
+            disabled={registerMutation.isPending}
             className={`w-full pl-10 pr-12 py-3 border-2 rounded-lg focus:outline-none ${
               errors.password
                 ? "border-red-400 focus:border-red-500"
@@ -89,7 +146,7 @@ export function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            disabled={mutation.isPending}
+            disabled={registerMutation.isPending}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
           >
             {showPassword ? (
@@ -107,28 +164,35 @@ export function LoginForm() {
         )}
       </div>
 
+      {referralCode && (
+        <div className="mb-5 p-3 bg-purple-50 border border-purple-200 rounded-lg text-sm text-purple-700">
+          Referred by code:{" "}
+          <span className="font-semibold">{referralCode}</span>
+        </div>
+      )}
+
       <button
         type="submit"
-        disabled={mutation.isPending}
+        disabled={registerMutation.isPending}
         className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2"
       >
-        {mutation.isPending ? (
+        {registerMutation.isPending ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
-            <span>Signing in...</span>
+            <span>Creating account...</span>
           </>
         ) : (
-          <span>Sign In</span>
+          <span>Sign Up</span>
         )}
       </button>
 
       <div className="mt-6 text-center text-sm text-gray-600">
-        Don't have an account?{" "}
+        Already have an account?{" "}
         <Link
-          href="/register"
+          href="/login"
           className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
         >
-          Sign up
+          Sign in
         </Link>
       </div>
     </form>

@@ -1,5 +1,5 @@
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { create } from "zustand";
-import { setCookie, getCookie, deleteCookie } from "cookies-next";
 
 interface AuthState {
   token: string | null;
@@ -8,14 +8,14 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  token: (getCookie("token") as string) || null,
+  token: (getCookie("accessToken") as string) || null,
   setToken: (token) => {
-    if (token) setCookie("token", token);
-    else deleteCookie("token");
+    if (token) setCookie("accessToken", token);
+    else deleteCookie("accessToken");
     set({ token });
   },
   logout: () => {
-    deleteCookie("token");
+    deleteCookie("accessToken");
     set({ token: null });
   },
 }));
