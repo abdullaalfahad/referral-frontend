@@ -15,7 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/use-auth";
-import { useReferral } from "@/hooks/use-referral";
+import { useReferral } from "@/hooks/use-referrals";
 import { useRegister } from "@/hooks/use-register";
 import { type RegisterInput, registerSchema } from "@/schemas/register-schema";
 
