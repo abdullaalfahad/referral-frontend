@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import api from "@/lib/axios";
+import api from "@/lib/xior";
 import type { RegisterInput } from "@/schemas/register-schema";
 
 export function useRegister() {

@@ -1,8 +1,9 @@
-import axios from "axios";
 import { getCookie } from "cookies-next";
+import xior from "xior";
 
-const api = axios.create({
+const api = xior.create({
   baseURL: "https://referral-backend-69kc.onrender.com",
+  cache: "no-store",
   headers: {
     "Content-Type": "application/json",
   },

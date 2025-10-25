@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import api from "@/lib/axios";
+import api from "@/lib/xior";
 import type { LeaderboardApiResponse } from "@/types/leaderboard";
 
 export function useLeaderboard() {

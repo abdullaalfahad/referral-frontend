@@ -1,9 +1,7 @@
-"use client";
-
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useAuth } from "@/hooks/use-auth";
-import api from "@/lib/axios";
+import api from "@/lib/xior";
 import type { LoginInput } from "@/schemas/login-schema";
 
 export function useLogin() {
