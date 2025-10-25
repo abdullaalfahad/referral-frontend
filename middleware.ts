@@ -6,13 +6,22 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return token
+      ? NextResponse.redirect(new URL("/dashboard", req.url))
+      : NextResponse.redirect(new URL("/login", req.url));
   }
 
   const isAuthRoute =
     pathname.startsWith("/login") || pathname.startsWith("/register");
 
-  if (!token && !isAuthRoute) {
+  const isProtectedRoute = [
+    "/dashboard",
+    "/referrals",
+    "/purchase",
+    "/leaderboard",
+  ].some((route) => pathname.startsWith(route));
+
+  if (!token && isProtectedRoute) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -24,5 +33,13 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/dashboard", "/login", "/register"],
+  matcher: [
+    "/",
+    "/login",
+    "/register",
+    "/dashboard",
+    "/referrals",
+    "/purchase",
+    "/leaderboard",
+  ],
 };
