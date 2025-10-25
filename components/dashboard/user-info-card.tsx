@@ -52,7 +52,7 @@ export function UserInfoCard() {
             <p className="text-xs text-blue-700 font-medium mb-1">
               Your Referral Link
             </p>
-            <p className="text-lg font-mono font-bold text-blue-900">
+            <p className="text-lg font-mono break-all font-bold text-blue-900">
               {referralLink}
             </p>
           </div>
