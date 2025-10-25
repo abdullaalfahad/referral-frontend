@@ -8,8 +8,10 @@ export function UserInfoCard() {
   const { data } = useDashboard();
   const [copied, setCopied] = useState(false);
 
-  const copyReferralCode = () => {
-    navigator.clipboard.writeText(data?.referralCode);
+  const referralLink = `${window.location.origin}/register?ref=${data.referralCode}`;
+
+  const copyReferralLink = () => {
+    navigator.clipboard.writeText(referralLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -48,15 +50,15 @@ export function UserInfoCard() {
         <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border-2 border-blue-200">
           <div className="flex-1">
             <p className="text-xs text-blue-700 font-medium mb-1">
-              Your Referral Code
+              Your Referral Link
             </p>
             <p className="text-lg font-mono font-bold text-blue-900">
-              {data?.referralCode}
+              {referralLink}
             </p>
           </div>
           <button
             type="button"
-            onClick={copyReferralCode}
+            onClick={copyReferralLink}
             className="p-2 bg-white rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
           >
             {copied ? (
