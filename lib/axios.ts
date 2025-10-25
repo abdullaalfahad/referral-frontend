@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 
 const api = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: "https://referral-backend-69kc.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
