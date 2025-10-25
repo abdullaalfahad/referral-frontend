@@ -1,5 +1,12 @@
 import { RegisterForm } from "@/components/auth/register-form";
 
-export default function RegisterPage() {
-  return <RegisterForm />;
+export default async function RegisterPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
+  const params = await searchParams;
+  const ref = params?.ref;
+
+  return <RegisterForm referralCode={ref} />;
 }

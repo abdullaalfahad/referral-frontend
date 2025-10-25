@@ -11,7 +11,6 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/use-auth";
@@ -19,10 +18,8 @@ import { useReferral } from "@/hooks/use-referrals";
 import { useRegister } from "@/hooks/use-register";
 import { type RegisterInput, registerSchema } from "@/schemas/register-schema";
 
-export function RegisterForm() {
+export function RegisterForm({ referralCode }: { referralCode?: string }) {
   const [showPassword, setShowPassword] = useState(false);
-  const searchParams = useSearchParams();
-  const referralCode = searchParams.get("ref");
 
   const { setToken, redirectToDashboard } = useAuth();
 
