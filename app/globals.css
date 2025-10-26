@@ -28,3 +28,11 @@ body {
 button {
   cursor: pointer;
 }
+
+input {
+  color: black;
+}
+
+input::placeholder {
+  color: light-gray;
+}
